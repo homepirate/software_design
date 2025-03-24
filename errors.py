@@ -1,0 +1,3 @@
+
+class ShiftOverlapError(Exception):
+    pass

@@ -1,0 +1,3 @@
+DRIVERS_ID = 0
+
+DRIVERS_DICT = dict()
