@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import TYPE_CHECKING
 from .base import Base
 import database
@@ -11,6 +12,15 @@ class Driver(Base):
     full_name: str = ""
     active: bool = True
     schedule: list["WorkShift"] = field(default_factory=list)
+
+    def __post_init__(self):
+        name = self.full_name.strip()
+        if not name:
+            raise ValueError("Полное имя не может быть пустым.")
+        if any(char.isdigit() for char in name):
+            raise ValueError("Полное имя не должно содержать цифр.")
+        if len(name.split()) < 2:
+            raise ValueError("Укажите как минимум имя и фамилию.")
 
     def save(self):
         database.DRIVERS_ID += 1
@@ -29,3 +39,11 @@ class Driver(Base):
         if active is not None:
             self.active = active
         self.save()
+
+    def is_driver_available_at(self, moment: datetime) -> bool:
+        if not self.active:
+            return False
+        for shift in self.schedule:
+            if shift.start <= moment <= shift.end:
+                return False
+        return True
