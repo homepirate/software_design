@@ -18,6 +18,9 @@ def get_driver_by_id(id: int) -> Driver:
 def add_work_shift(id: int, shift: WorkShift):
     driver = get_driver_by_id(id)
 
+    if not driver.active:
+        raise ValueError("Водитель не активен")
+
     if (shift.end - shift.start) > timedelta(hours=MAX_SHIFT_HOURS):
         raise ValueError(f"Длительность смены не должна превышать {MAX_SHIFT_HOURS} часов.")
 
