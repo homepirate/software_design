@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from errors import EmptyMessageError
 from .base import Base
+import database
 
 if TYPE_CHECKING:
     from .attachment import Attachment
@@ -20,6 +21,9 @@ class Message(Base):
             raise EmptyMessageError("Сообщение не может быть пустым.")
         if not self.sender.strip():
             raise EmptyMessageError("Отправитель не может быть пустым.")
+
+        database.MESSAGE_ID += 1
+        self.id = database.MESSAGE_ID
 
     def confirm(self, confirming_party: str):
         if self.sender == confirming_party:

@@ -10,3 +10,6 @@ class ObjectNotFoundError(ValueError):
 
 class OrderOperationError(ValueError):
     pass
+
+class ValidationError(ValueError):
+    pass

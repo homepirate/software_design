@@ -20,3 +20,8 @@ class OrderStatus:
     @classmethod
     def cancelled(cls) -> 'OrderStatus':
         return cls(status=cls.CANCELLED)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.status=})"
+
+

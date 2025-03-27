@@ -4,8 +4,6 @@ import database
 class OrderRepository:
 
     def save(self, order: TransportationOrder):
-        database.ORDERS_ID += 1
-        order.id = database.ORDERS_ID
         database.ORDERS_DICT[order.id] = order
 
     def get_by_id(self, order_id: int) -> TransportationOrder | None:

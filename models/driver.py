@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import TYPE_CHECKING
+
+from errors import ValidationError
 from .base import Base
 import database
 
@@ -16,15 +18,16 @@ class Driver(Base):
     def __post_init__(self):
         name = self.full_name.strip()
         if not name:
-            raise ValueError("Полное имя не может быть пустым.")
+            raise ValidationError("Полное имя не может быть пустым.")
         if any(char.isdigit() for char in name):
-            raise ValueError("Полное имя не должно содержать цифр.")
+            raise ValidationError("Полное имя не должно содержать цифр.")
         if len(name.split()) < 2:
-            raise ValueError("Укажите как минимум имя и фамилию.")
+            raise ValidationError("Укажите как минимум имя и фамилию.")
 
-    def save(self):
         database.DRIVERS_ID += 1
         self.id = database.DRIVERS_ID
+
+    def save(self):
         database.DRIVERS_DICT[self.id] = self
 
     def delete(self):

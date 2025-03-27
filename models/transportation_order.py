@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
+import database
 from errors import OrderOperationError
 from .base import Base
 from .delivery_route import DeliveryRoute
@@ -13,6 +14,11 @@ class TransportationOrder(Base):
     delivery_route: DeliveryRoute | None= None
     messages: list[Message] = field(default_factory=list)
     last_activity: datetime = field(default_factory=datetime.now)
+
+
+    def __post_init__(self):
+        database.ORDERS_ID += 1
+        self.id = database.ORDERS_ID
 
     def add_message(self, message: Message):
         if self.status.status != OrderStatus.ACTIVE:
